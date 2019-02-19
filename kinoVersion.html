@@ -19,9 +19,10 @@
         <a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>
         <a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>
 
-        <a-camera position="0 0 0" stereocam="eye:left;" id='camera'>
+        <a-camera position="0 0 0" stereocam="eye:left;" id='camera' zoom='1'>
             <a-entity animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1" animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1" animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
-                cursor="fuse: true;" material="color: black; shader: flat" position="0 0 -2.5" geometry="primitive: ring; radiusInner: 0.06; radiusOuter: 0.09" id='cursor'></a-entity> <!--  -->
+                cursor="fuse: true;" material="color: black; shader: flat" position="0 0 -2.5" geometry="primitive: ring; radiusInner: 0.06; radiusOuter: 0.09" id='cursor'></a-entity>
+            <!--  -->
             </a-entity>
         </a-camera>
 
@@ -29,12 +30,21 @@
         <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:right"></a-entity>
     </a-scene>
 
-    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+    <!--<script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>-->
     <script>
-        document.querySelector('#screen').addEventListener('click', function() {
-            document.querySelector('video').play();
-        });
         //     }, false);
+
+        function getPlatformType() {
+            if (navigator.userAgent.match(/mobile/i)) {
+                return 'Mobile';
+            }
+            else if (navigator.userAgent.match(/iPad|Android|Touch/i)) {
+                return 'Tablet';
+            }
+            else {
+                return 'Desktop';
+            }
+        }
 
         class Entity {
             constructor(position, geometry, material, id) {
@@ -56,23 +66,63 @@
 
             scene.appendChild(tmpEntity);
         };
+        
+        const playToggleVideo = () => {
+            let video =  document.querySelector('video');
+            video.paused ? video.play() : video.pause();
+        }
+        const stopVideo = () => {
+            let video =  document.querySelector('video');
+            if (video.currentTime !== 0) {
+                video.currentTime = 0;
+                video.pause;
+            }
+        }
+    
+        const scipAhead = () => {
+            let video =  document.querySelector('video');
+            video.currentTime = parseFloat(video.currentTime) + 15;
+        }
+        
+        const replay = () => {
+            let video =  document.querySelector('video');
+            video.currentTime = parseFloat(video.currentTime) - 15;
+        }
+        
+        const zoomIn = () => {
+            var camera = document.querySelector('#camera');
+            camera.setAttribute('zoom', parseFloat(camera.getAttribute('zoom')) + 0.25);
+        }
+        
+        const zoomOut = () => {
+            var camera = document.querySelector('#camera');
+            camera.setAttribute('zoom', parseFloat(camera.getAttribute('zoom')) - 0.25);
+        }
 
         const makeControlls = (optionsArr, event) => {
             // let cursorPosition = event.detail.intersection.point;
             // cursorPosition.z += 1;
             let center = new Entity('0 0 -2.9', 'primitive: circle; radius: 0.2', 'color: red', 'center');
             renderEntity(center, 'scene');
+            document.querySelector('#center').addEventListener('click', function(){
+                if (visibleControlls) {
+                removeControlls();
+                visibleControlls = false;
+                controllsJustRemoved = true;
+            }
+            });
             // document.querySelector('#center').setAttribute('look-at', '[camera]');
 
-            let actionCirclesPositions = [{ name: 'scip', position: '0.7 0.4 0' },
-                { name: 'play', position: '0 0.8 0' },
-                { name: 'zoomIn', position: '0.7 -0.4 0' },
-                { name: 'zoomOut', position: '-0.7 -0.4 0' },
-                { name: 'replay', position: '-0.7 0.4 0' },
-                { name: 'stop', position: '0 -0.8 0' }
-            ];
+            let actionCirclesPositions = [{ name: 'scip', position: '0.7 0.4 0', callback: scipAhead},
+                                            { name: 'play', position: '0 0.8 0' , callback: playToggleVideo},
+                                            { name: 'zoomIn', position: '0.7 -0.4 0', callback: zoomIn},
+                                            { name: 'zoomOut', position: '-0.7 -0.4 0', callback: zoomOut},
+                                            { name: 'replay', position: '-0.7 0.4 0', callback: replay},
+                                            { name: 'stop', position: '0 -0.8 0', callback: stopVideo }
+                                        ];
             actionCirclesPositions.forEach(function(action) {
                 let actionCircle = renderEntity(new Entity(action.position, 'primitive: circle; radius: 0.3', 'color: yellow', action.name), 'center');
+                document.querySelector('#' + action.name).addEventListener('click', action.callback);
             });
         }
 
@@ -81,17 +131,22 @@
         }
 
         let visibleControlls = false;
+        let controllsJustRemoved = false;
         document.querySelector('#screen').addEventListener('click', function(e) {
-            if (!visibleControlls) {
+            console.log(controllsJustRemoved)
+            if (!visibleControlls && !controllsJustRemoved) {
                 makeControlls('placeholder', e);
                 visibleControlls = true;
             }
-            else {
-                removeControlls();
-                visibleControlls = false;
-            }
-
         });
+        
+        document.querySelector('#screen').addEventListener('mouseleave', function(e) {
+           controllsJustRemoved = false; 
+        });
+        
+        
+
+        console.log(getPlatformType());
     </script>
 </body>
 
