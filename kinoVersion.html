@@ -1,0 +1,85 @@
+<html>
+
+<head>
+    <title>Kino in 3D</title>
+    <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+</head>
+
+<body>
+    <a-scene id='scene'>
+        <video id="video" loop autoplay src="/Love 30 DE.mp4">
+        </video>
+
+        <a-entity geometry="primitive: sphere;
+                      radius: 100;
+                      segmentsWidth: 64;
+                      segmentsHeight: 64;" material="shader: flat; color: darkblue;" scale="-1 1 1">
+        </a-entity>
+
+        <a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>
+        <a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>
+
+        <a-camera position="0 0 0" stereocam="eye:left;" id='camera'>
+            <a-entity
+                  animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+                  animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
+                  animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
+                  cursor="fuse: true;"
+                  material="color: black; shader: flat"
+                  position="0 0 -3"
+                  geometry="primitive: ring; radiusInner: 0.06; radiusOuter: 0.09"></a-entity>
+            </a-entity>
+        </a-camera>
+
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:left" id='screen'></a-entity>
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:right"></a-entity>
+    </a-scene>
+
+     <script>
+     
+     document.querySelector('#screen').addEventListener('click', function(){
+         document.querySelector('video').play();
+     });
+    //     }, false);
+    
+    class Entity {
+        constructor(position, geometry, material, id) {
+            this.position = position;
+            this.geometry = geometry;
+            this.material = material;
+            this.id = id;
+        }
+    }
+    
+    const renderEntity = (entity, parentId) => {
+        const scene = document.querySelector('#' + parentId);
+        
+        let tmpEntity = document.createElement('a-entity');
+        tmpEntity.setAttribute('position', entity.position);
+        tmpEntity.setAttribute('geometry', entity.geometry);
+        tmpEntity.setAttribute('material', entity.material);
+        tmpEntity.setAttribute('id', entity.id);
+        
+        scene.appendChild(tmpEntity);
+    };
+    
+    const makeControlls = (optionsArr) => {
+        let center = new Entity('0 0 -2', 'primitive: circle; radius: 0.2', 'color: red', 'center');
+        renderEntity(center, 'scene');
+        
+        let actionCirclesPositions = [{name: 'scip', position: '0.7 0.4 0'}, 
+                                      {name: 'play', position: '0 0.8 0'},
+                                      {name: 'zoomIn', position:  '0.7 -0.4 0'},
+                                      {name: 'zoomOut', position: '-0.7 -0.4 0'},
+                                      {name: 'replay', position: '-0.7 0.4 0'},
+                                      {name: 'stop', position: '0 -0.8 0'}];
+        actionCirclesPositions.forEach(function(action){
+            let actionCircle = renderEntity(new Entity(action.position, 'primitive: circle; radius: 0.3', 'color: yellow', action.name ), 'center');
+        });
+    }
+    
+    document.querySelector('body').addEventListener('click', makeControlls.bind('placeholder'));
+    </script>
+</body>
+
+</html>
