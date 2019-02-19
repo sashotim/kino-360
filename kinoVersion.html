@@ -20,14 +20,8 @@
         <a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>
 
         <a-camera position="0 0 0" stereocam="eye:left;" id='camera'>
-            <a-entity
-                  animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
-                  animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
-                  animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
-                  cursor="fuse: true;"
-                  material="color: black; shader: flat"
-                  position="0 0 -3"
-                  geometry="primitive: ring; radiusInner: 0.06; radiusOuter: 0.09"></a-entity>
+            <a-entity animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1" animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1" animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
+                cursor="fuse: true;" material="color: black; shader: flat" position="0 0 -2.5" geometry="primitive: ring; radiusInner: 0.06; radiusOuter: 0.09" id='cursor'></a-entity> <!--  -->
             </a-entity>
         </a-camera>
 
@@ -35,50 +29,69 @@
         <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:right"></a-entity>
     </a-scene>
 
-     <script>
-     
-     document.querySelector('#screen').addEventListener('click', function(){
-         document.querySelector('video').play();
-     });
-    //     }, false);
-    
-    class Entity {
-        constructor(position, geometry, material, id) {
-            this.position = position;
-            this.geometry = geometry;
-            this.material = material;
-            this.id = id;
-        }
-    }
-    
-    const renderEntity = (entity, parentId) => {
-        const scene = document.querySelector('#' + parentId);
-        
-        let tmpEntity = document.createElement('a-entity');
-        tmpEntity.setAttribute('position', entity.position);
-        tmpEntity.setAttribute('geometry', entity.geometry);
-        tmpEntity.setAttribute('material', entity.material);
-        tmpEntity.setAttribute('id', entity.id);
-        
-        scene.appendChild(tmpEntity);
-    };
-    
-    const makeControlls = (optionsArr) => {
-        let center = new Entity('0 0 -2', 'primitive: circle; radius: 0.2', 'color: red', 'center');
-        renderEntity(center, 'scene');
-        
-        let actionCirclesPositions = [{name: 'scip', position: '0.7 0.4 0'}, 
-                                      {name: 'play', position: '0 0.8 0'},
-                                      {name: 'zoomIn', position:  '0.7 -0.4 0'},
-                                      {name: 'zoomOut', position: '-0.7 -0.4 0'},
-                                      {name: 'replay', position: '-0.7 0.4 0'},
-                                      {name: 'stop', position: '0 -0.8 0'}];
-        actionCirclesPositions.forEach(function(action){
-            let actionCircle = renderEntity(new Entity(action.position, 'primitive: circle; radius: 0.3', 'color: yellow', action.name ), 'center');
+    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+    <script>
+        document.querySelector('#screen').addEventListener('click', function() {
+            document.querySelector('video').play();
         });
-    }
-    
-    document.querySelector('body').addEventListener('click', makeControlls.bind('placeholder'));
+        //     }, false);
+
+        class Entity {
+            constructor(position, geometry, material, id) {
+                this.position = position;
+                this.geometry = geometry;
+                this.material = material;
+                this.id = id;
+            }
+        }
+
+        const renderEntity = (entity, parentId) => {
+            const scene = document.querySelector('#' + parentId);
+
+            let tmpEntity = document.createElement('a-entity');
+            tmpEntity.setAttribute('position', entity.position);
+            tmpEntity.setAttribute('geometry', entity.geometry);
+            tmpEntity.setAttribute('material', entity.material);
+            tmpEntity.setAttribute('id', entity.id);
+
+            scene.appendChild(tmpEntity);
+        };
+
+        const makeControlls = (optionsArr, event) => {
+            // let cursorPosition = event.detail.intersection.point;
+            // cursorPosition.z += 1;
+            let center = new Entity('0 0 -2.9', 'primitive: circle; radius: 0.2', 'color: red', 'center');
+            renderEntity(center, 'scene');
+            // document.querySelector('#center').setAttribute('look-at', '[camera]');
+
+            let actionCirclesPositions = [{ name: 'scip', position: '0.7 0.4 0' },
+                { name: 'play', position: '0 0.8 0' },
+                { name: 'zoomIn', position: '0.7 -0.4 0' },
+                { name: 'zoomOut', position: '-0.7 -0.4 0' },
+                { name: 'replay', position: '-0.7 0.4 0' },
+                { name: 'stop', position: '0 -0.8 0' }
+            ];
+            actionCirclesPositions.forEach(function(action) {
+                let actionCircle = renderEntity(new Entity(action.position, 'primitive: circle; radius: 0.3', 'color: yellow', action.name), 'center');
+            });
+        }
+
+        const removeControlls = () => {
+            document.querySelector('#scene').removeChild(document.querySelector('#center'));
+        }
+
+        let visibleControlls = false;
+        document.querySelector('#screen').addEventListener('click', function(e) {
+            if (!visibleControlls) {
+                makeControlls('placeholder', e);
+                visibleControlls = true;
+            }
+            else {
+                removeControlls();
+                visibleControlls = false;
+            }
+
+        });
     </script>
 </body>
 
