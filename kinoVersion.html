@@ -34,17 +34,17 @@
     <script>
         //     }, false);
 
-        // function getPlatformType() {
-        //     if (navigator.userAgent.match(/mobile/i)) {
-        //         return 'Mobile';
-        //     }
-        //     else if (navigator.userAgent.match(/iPad|Android|Touch/i)) {
-        //         return 'Tablet';
-        //     }
-        //     else {
-        //         return 'Desktop';
-        //     }
-        // }
+        function getPlatformType() {
+            if (navigator.userAgent.match(/mobile/i)) {
+                return 'Mobile';
+            }
+            else if (navigator.userAgent.match(/iPad|Android|Touch/i)) {
+                return 'Tablet';
+            }
+            else {
+                return 'Desktop';
+            }
+        }
 
         class Entity {
             constructor(position, geometry, material, id) {
@@ -66,34 +66,34 @@
 
             scene.appendChild(tmpEntity);
         };
-        
+
         const playToggleVideo = () => {
-            let video =  document.querySelector('video');
+            let video = document.querySelector('video');
             video.paused ? video.play() : video.pause();
         }
         const stopVideo = () => {
-            let video =  document.querySelector('video');
+            let video = document.querySelector('video');
             if (video.currentTime !== 0) {
                 video.currentTime = 0;
-                video.pause;
+                video.pause();
             }
         }
-    
+
         const scipAhead = () => {
-            let video =  document.querySelector('video');
+            let video = document.querySelector('video');
             video.currentTime = parseFloat(video.currentTime) + 15;
         }
-        
+
         const replay = () => {
-            let video =  document.querySelector('video');
+            let video = document.querySelector('video');
             video.currentTime = parseFloat(video.currentTime) - 15;
         }
-        
+
         const zoomIn = () => {
             var camera = document.querySelector('#camera');
             camera.setAttribute('zoom', parseFloat(camera.getAttribute('zoom')) + 0.25);
         }
-        
+
         const zoomOut = () => {
             var camera = document.querySelector('#camera');
             camera.setAttribute('zoom', parseFloat(camera.getAttribute('zoom')) - 0.25);
@@ -104,22 +104,22 @@
             // cursorPosition.z += 1;
             let center = new Entity('0 0 -2.9', 'primitive: circle; radius: 0.2', 'color: red', 'center');
             renderEntity(center, 'scene');
-            document.querySelector('#center').addEventListener('click', function(){
+            document.querySelector('#center').addEventListener('click', function() {
                 if (visibleControlls) {
-                removeControlls();
-                visibleControlls = false;
-                controllsJustRemoved = true;
-            }
+                    removeControlls();
+                    visibleControlls = false;
+                    controllsJustRemoved = true;
+                }
             });
             // document.querySelector('#center').setAttribute('look-at', '[camera]');
 
-            let actionCirclesPositions = [  { name: 'scip', position: '0.7 0.4 0', callback: scipAhead},
-                                            { name: 'play', position: '0 0.8 0' , callback: playToggleVideo},
-                                            { name: 'zoomIn', position: '0.7 -0.4 0', callback: zoomIn},
-                                            { name: 'zoomOut', position: '-0.7 -0.4 0', callback: zoomOut},
-                                            { name: 'replay', position: '-0.7 0.4 0', callback: replay},
-                                            { name: 'stop', position: '0 -0.8 0', callback: stopVideo }
-                                        ];
+            let actionCirclesPositions = [{ name: 'scip', position: '0.7 0.4 0', callback: scipAhead },
+                { name: 'play', position: '0 0.8 0', callback: playToggleVideo },
+                { name: 'zoomIn', position: '0.7 -0.4 0', callback: zoomIn },
+                { name: 'zoomOut', position: '-0.7 -0.4 0', callback: zoomOut },
+                { name: 'replay', position: '-0.7 0.4 0', callback: replay },
+                { name: 'stop', position: '0 -0.8 0', callback: stopVideo }
+            ];
             actionCirclesPositions.forEach(function(action) {
                 let actionCircle = renderEntity(new Entity(action.position, 'primitive: circle; radius: 0.3', 'color: yellow', action.name), 'center');
                 document.querySelector('#' + action.name).addEventListener('click', action.callback);
@@ -130,23 +130,42 @@
             document.querySelector('#scene').removeChild(document.querySelector('#center'));
         }
 
+
+        const main = () => {
+            switch (getPlatformType()) {
+                case 'Desktop':
+                    document.querySelector('#cursor').setAttribute('cursor', 'rayOrigin: mouse; fuse: false');
+                    document.querySelector('#cursor').setAttribute('visible', 'false');
+
+                    document.querySelector('#screen').addEventListener('click', function(e) {
+                        console.log(controllsJustRemoved)
+                        if (!visibleControlls) {
+                            makeControlls('placeholder', e);
+                            visibleControlls = true;
+                        }
+                    });
+                    break;
+                case 'Mobile' || 'Tablet':
+                    document.querySelector('#cursor').setAttribute('cursor', 'fuse: true');
+                    document.querySelector('#screen').addEventListener('click', function(e) {
+                        console.log(controllsJustRemoved)
+                        if (!visibleControlls && !controllsJustRemoved) {
+                            makeControlls('placeholder', e);
+                            visibleControlls = true;
+                        }
+                    });
+
+                    document.querySelector('#screen').addEventListener('mouseleave', function(e) {
+                        controllsJustRemoved = false;
+                    });
+                    break;
+            }
+        }
+
+
         let visibleControlls = false;
         let controllsJustRemoved = false;
-        document.querySelector('#screen').addEventListener('click', function(e) {
-            console.log(controllsJustRemoved)
-            if (!visibleControlls && !controllsJustRemoved) {
-                makeControlls('placeholder', e);
-                visibleControlls = true;
-            }
-        });
-        
-        document.querySelector('#screen').addEventListener('mouseleave', function(e) {
-           controllsJustRemoved = false; 
-        });
-        
-        
-
-        console.log(getPlatformType());
+        main();
     </script>
 </body>
 
