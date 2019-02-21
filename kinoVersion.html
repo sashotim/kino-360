@@ -34,17 +34,17 @@
     <script>
         //     }, false);
 
-        function getPlatformType() {
-            if (navigator.userAgent.match(/mobile/i)) {
-                return 'Mobile';
-            }
-            else if (navigator.userAgent.match(/iPad|Android|Touch/i)) {
-                return 'Tablet';
-            }
-            else {
-                return 'Desktop';
-            }
-        }
+        // function getPlatformType() {
+        //     if (navigator.userAgent.match(/mobile/i)) {
+        //         return 'Mobile';
+        //     }
+        //     else if (navigator.userAgent.match(/iPad|Android|Touch/i)) {
+        //         return 'Tablet';
+        //     }
+        //     else {
+        //         return 'Desktop';
+        //     }
+        // }
 
         class Entity {
             constructor(position, geometry, material, id) {
@@ -113,7 +113,7 @@
             });
             // document.querySelector('#center').setAttribute('look-at', '[camera]');
 
-            let actionCirclesPositions = [{ name: 'scip', position: '0.7 0.4 0', callback: scipAhead},
+            let actionCirclesPositions = [  { name: 'scip', position: '0.7 0.4 0', callback: scipAhead},
                                             { name: 'play', position: '0 0.8 0' , callback: playToggleVideo},
                                             { name: 'zoomIn', position: '0.7 -0.4 0', callback: zoomIn},
                                             { name: 'zoomOut', position: '-0.7 -0.4 0', callback: zoomOut},
