@@ -16,8 +16,8 @@
                       segmentsHeight: 64;" material="shader: flat; color: darkblue;" scale="-1 1 1">
         </a-entity>
 
-        <a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>
-        <a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>
+        <!--<a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>-->
+        <!--<a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>-->
 
         <a-camera position="0 0 0" stereocam="eye:left;" id='camera' zoom='1'>
             <a-entity animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1" animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1" animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
@@ -28,6 +28,12 @@
 
         <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:left" id='screen'></a-entity>
         <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:right"></a-entity>
+
+        <a-assets>
+            <a-asset-item id="hand" src="scene.gltf"></a-asset-item>
+        </a-assets>
+
+        <a-entity gltf-model="#hand" position='3 0 0'></a-entity>
     </a-scene>
 
     <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
@@ -106,7 +112,6 @@
             renderEntity(center, 'controllsSquare');
             document.querySelector('#center').addEventListener('click', function() {
                 if (visibleControlls) {
-                    console.log('controlls should disappear')
                     hideControlls();
                     visibleControlls = false;
                     controllsJustRemoved = true;
@@ -134,7 +139,6 @@
                 document.querySelector('#' + action.name).addEventListener('click', action.callback);
             });
         };
-
         const hideControlls = () => {
             document.querySelector('#center').setAttribute('position', '0 0 -1');
         };
@@ -161,12 +165,11 @@
 
                     document.querySelector('#controllsSquare').addEventListener('click', function(e) {
                         if (!visibleControlls && e.target === document.querySelector('#controllsSquare')) {
-                            console.log('controlls should show')
                             showControlls();
                             visibleControlls = true;
                         }
                     }, false);
-                break;
+                    break;
                 case 'Mobile' || 'Tablet':
                     document.querySelector('#cursor').setAttribute('cursor', 'fuse: true');
                     document.querySelector('#controllsSquare').addEventListener('click', function() {
