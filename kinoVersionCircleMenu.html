@@ -7,15 +7,17 @@
 
 <body>
     <a-scene id='scene'>
-        <!--<video id="video" loop autoplay src="/public/videos/carotisOP_L.mp4">-->
-        <video id="video" loop autoplay src="/Love 30 DE.mp4">
-        </video>
-        
-        <video id="videoR" loop autoplay src="/public/videos/carotisOP_R.mp4">
-        </video>
+
 
         <a-assets>
             <img id="sky" src="/R0010192_20181001134315.JPG">
+            <video id="video" loop autoplay src="public/videos/carotisOP_L.mp4">
+            <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
+            </video>
+
+            <video id="videoR" loop autoplay src="public/videos/carotisOP_R.mp4">
+                <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
+            </video>
         </a-assets>
         <a-sky src="#sky"></a-sky>
 
@@ -29,8 +31,8 @@
             </a-entity>
         </a-camera>
 
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:left" id='screen'></a-entity>
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -3" stereo="eye:right"></a-entity>
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -4" stereo="eye:left" id='screen'></a-entity>
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -4" stereo="eye:right"></a-entity>
 
         <a-assets>
             <a-asset-item id="vene" src="scene.gltf"></a-asset-item>
@@ -39,7 +41,8 @@
         <a-entity gltf-model="#vene" position='4 0 0'></a-entity>
     </a-scene>
 
-    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+    <script src="/aframe-look-at-component.js"></script>
+     <script src="aframe-stereo-component.js"></script>
     <script>
         //     }, false);
 
@@ -80,6 +83,7 @@
             let video = document.querySelector('video');
             video.paused ? video.play() : video.pause();
         }
+
         const stopVideo = () => {
             let video = document.querySelector('video');
             if (video.currentTime !== 0) {
@@ -153,7 +157,7 @@
 
         const main = () => {
 
-            let controllsSquare = new Entity('-4.25 0 -2.55', 'primitive: plane; width: 1; height: 4.5', 'color: transparent', 'controllsSquare');
+            let controllsSquare = new Entity('-4.25 0 -2.55', 'primitive: plane; width: 1; height: 4.5', 'color: lightgray', 'controllsSquare');
             renderEntity(controllsSquare, 'scene');
             document.querySelector('#controllsSquare').setAttribute('look-at', '[camera]');
 
