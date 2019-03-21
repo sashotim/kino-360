@@ -7,14 +7,16 @@
 
 <body>
     <a-scene id='scene'>
-        <video id="video" loop autoplay src="/Love 30 DE.mp4">
+        <video id="video" loop autoplay src="/carotisOP_R.mp4">
+        </video>
+        
+        <video id="videoR" loop autoplay src="/carotisOP_R.mp4">
         </video>
 
-        <a-entity geometry="primitive: sphere;
-                      radius: 100;
-                      segmentsWidth: 64;
-                      segmentsHeight: 64;" material="shader: flat; color: darkblue;" scale="-1 1 1">
-        </a-entity>
+        <a-assets>
+            <img id="sky" src="/R0010192_20181001134315.JPG">
+        </a-assets>
+        <a-sky src="#sky"></a-sky>
 
         <!--<a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>-->
         <!--<a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>-->
@@ -27,13 +29,13 @@
         </a-camera>
 
         <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:left" id='screen'></a-entity>
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -3" stereo="eye:right"></a-entity>
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -3" stereo="eye:right"></a-entity>
 
         <a-assets>
-            <a-asset-item id="hand" src="scene.gltf"></a-asset-item>
+            <a-asset-item id="vene" src="scene.gltf"></a-asset-item>
         </a-assets>
 
-        <a-entity gltf-model="#hand" position='3 0 0'></a-entity>
+        <a-entity gltf-model="#vene" position='4 0 0'></a-entity>
     </a-scene>
 
     <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
