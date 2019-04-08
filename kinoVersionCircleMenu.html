@@ -6,7 +6,9 @@
 </head>
 
 <body>
+    <!--<script src="https://aframe.io/releases/latest/aframe.min.js"></script>-->
     <script src="/aframe-look-at-component.js"></script>
+    <!--<script src="/aframe-stereo-component.js.min.js"></script>-->
     <a-scene id='scene'>
 
 
@@ -36,11 +38,13 @@
         <!--<a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: public/videos/carotisOP_R.mp4" position="0 0 -4" stereo="eye:right"></a-entity>-->
         
         <a-entity stereo="eye:left" id='screen'>
-            <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -4" ></a-entity>
+            <!--<a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -4" ></a-entity>-->
+            <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="color: red" position="0 0 -4" ></a-entity>
         </a-entity>
         
         <a-entity stereo="eye:right" id='screenR'>
-            <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -4" ></a-entity>
+            <!--<a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -4" ></a-entity>-->
+            <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="color: blue" position="0 0 -4" ></a-entity>
         </a-entity>
         
 
@@ -91,7 +95,7 @@
 
         const playToggleVideo = () => {
             console.log("play button clicked");
-            let video = document.querySelector('#screen').src;
+            let video = document.querySelector('video');
             video.paused ? video.play() : video.pause();
         }
 
