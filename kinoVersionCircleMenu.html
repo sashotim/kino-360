@@ -12,11 +12,11 @@
 
         <!--<a-assets>-->
             <img id="sky" src="/R0010192_20181001134315.JPG">
-            <video id="video" loop autoplay src="public/videos/carotisOP_L.mp4">
+            <video id="video" loop autoplay src="public/videos/carotisOP_L.mp4" width="1024" height="512">
             <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
 
-            <video id="videoR" loop autoplay src="public/videos/carotisOP_R.mp4">
+            <video id="videoR" loop autoplay src="public/videos/carotisOP_R.mp4"width="1024" height="512">
                 <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
         <!--</a-assets>-->
@@ -32,8 +32,17 @@
             </a-entity>
         </a-camera>
 
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: public/videos/carotisOP_L.mp4" position="0 0 -4" stereo="eye:left" id='screen'></a-entity>
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: public/videos/carotisOP_R.mp4" position="0 0 -4" stereo="eye:right"></a-entity>
+        <!--<a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: public/videos/carotisOP_L.mp4" position="0 0 -4" stereo="eye:left" id='screen'></a-entity>-->
+        <!--<a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: public/videos/carotisOP_R.mp4" position="0 0 -4" stereo="eye:right"></a-entity>-->
+        
+        <a-entity stereo="eye:left" id='screen'>
+            <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -4" ></a-entity>
+        </a-entity>
+        
+        <a-entity stereo="eye:right" id='screenR'>
+            <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -4" ></a-entity>
+        </a-entity>
+        
 
         <!--<a-assets>-->
         <!--    <a-asset-item id="vene" src="scene.gltf"></a-asset-item>-->
@@ -81,7 +90,8 @@
         };
 
         const playToggleVideo = () => {
-            let video = document.querySelector('video');
+            console.log("play button clicked");
+            let video = document.querySelector('#screen').src;
             video.paused ? video.play() : video.pause();
         }
 
