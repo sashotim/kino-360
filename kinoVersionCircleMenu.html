@@ -169,22 +169,25 @@
         const playToggleVideo = () => {
             console.log("play button clicked");
             let video = document.querySelector('#video');
-            video.paused ? video.play() : video.pause();
-
             let videoR = document.querySelector('#videoR');
-            videoR.paused ? videoR.play() : videoR.pause();
+            
+           if (video.paused && videoR.paused) {
+               video.play();
+               videoR.play()
+           } else {
+               video.pause();
+               videoR.pause();
+           }
+               
         }
 
         const stopVideo = () => {
             let video = document.querySelector('#video');
-            if (video.currentTime !== 0) {
+            let videoR = document.querySelector('#videoR');
+            if (video.currentTime !== 0 && videoR.currentTime !== 0) {
                 video.currentTime = 0;
                 video.pause();
                 console.log(video.paused ? "videoL is paused at " + video.currentTime : "videoL is NOT paused");
-            }
-
-            let videoR = document.querySelector('#videoR');
-            if (videoR.currentTime !== 0) {
                 videoR.currentTime = 0;
                 videoR.pause();
                 console.log(videoR.paused ? "videoR is paused at " + videoR.currentTime : "videoR is NOT paused");
@@ -193,17 +196,17 @@
 
         const scipAhead = () => {
             let video = document.querySelector('#video');
-            video.currentTime = parseFloat(video.currentTime) + 15;
-
             let videoR = document.querySelector('#videoR');
+            
+            video.currentTime = parseFloat(video.currentTime) + 15;
             videoR.currentTime = parseFloat(videoR.currentTime) + 15;
         };
 
         const replay = () => {
             let video = document.querySelector('#video');
-            video.currentTime = parseFloat(video.currentTime) - 15;
-
             let videoR = document.querySelector('#videoR');
+            
+            video.currentTime = parseFloat(video.currentTime) - 15;
             videoR.currentTime = parseFloat(videoR.currentTime) - 15;
         };
 
