@@ -2,17 +2,97 @@
 
 <head>
     <title>Kino in 3D</title>
-    <script src="build.js"></script>
 </head>
 
 <body>
-    <!--<script src="https://aframe.io/releases/latest/aframe.min.js"></script>-->
+    <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
     <script src="/aframe-look-at-component.js"></script>
-    <!--<script src="/aframe-stereo-component.js.min.js"></script>-->
+    <script>
+        
+
+	  // Sets the 'default' eye viewed by camera in non-VR mode
+
+AFRAME.registerComponent('stereocam', {
+
+	      schema: {
+	        eye: { type: 'string', default: "left"}
+	      },
+
+	       // Cam is not attached on init, so use a flag to do this once at 'tick'
+
+	       // Use update every tick if flagged as 'not changed yet'
+
+	       init: function(){
+	            // Flag to register if cam layer has already changed
+	            this.layer_changed = false;
+	       },
+
+	       tick: function(time){
+
+	            var originalData = this.data;
+
+	            // If layer never changed
+
+	            if(!this.layer_changed){
+
+	            // because stereocam component should be attached to an a-camera element
+	            // need to get down to the root PerspectiveCamera before addressing layers
+
+	            // Gather the children of this a-camera and identify types
+
+	            var childrenTypes = [];
+
+	            this.el.object3D.children.forEach( function (item, index, array) {
+	                childrenTypes[index] = item.type;
+	            });
+
+	            // Retrieve the PerspectiveCamera
+	            var rootIndex = childrenTypes.indexOf("PerspectiveCamera");
+	            var rootCam = this.el.object3D.children[rootIndex];
+
+	            if(originalData.eye === "both"){
+	                rootCam.layers.enable( 1 );
+	                rootCam.layers.enable( 2 );
+	              }
+	              else{
+	                rootCam.layers.enable(originalData.eye === 'left' ? 1:2);
+	              }
+	            }
+	       }
+
+	  });
+	  
+	  
+	  
+
+	  // Sets the 'default' eye viewed by camera in non-VR mode
+
+AFRAME.registerComponent('stereo', {
+
+	      schema: {
+	        eye: { type: 'string', default: "left"}
+	      },
+	      
+		update: function(oldData){
+
+            var object3D = this.el.object3D.children[0];
+            var data = this.data;
+
+            if(data.eye === "both"){
+              object3D.layers.set(0);
+            }
+            else{
+              object3D.layers.set(data.eye === 'left' ? 1:2);
+            }
+
+       },
+
+	  });
+    </script>
     <a-scene id='scene'>
 
 
-        <!--<a-assets>-->
+        <a-assets>
             <img id="sky" src="/R0010192_20181001134315.JPG">
             <video id="video" loop autoplay src="public/videos/carotisOP_L.mp4" width="1024" height="512">
             <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
@@ -21,7 +101,7 @@
             <video id="videoR" loop autoplay src="public/videos/carotisOP_R.mp4"width="1024" height="512">
                 <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
-        <!--</a-assets>-->
+        </a-assets>
         <a-sky src="#sky"></a-sky>
 
         <!--<a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>-->
@@ -34,8 +114,8 @@
             </a-entity>
         </a-camera>
 
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: public/videos/carotisOP_L.mp4" position="0 0 -4" stereo="eye:left" id='screen'></a-entity>
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: public/videos/carotisOP_R.mp4" position="0 0 -4" stereo="eye:right"></a-entity>
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -4" stereo="eye:left" id='screen'></a-entity>
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -4" stereo="eye:right"></a-entity>
         
         <!--<a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video;" position="0 0 -4" stereo="eye:left" id='screen'></a-entity>-->
         <!--<a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -4" stereo="eye:right" id='screenR'></a-entity>-->
