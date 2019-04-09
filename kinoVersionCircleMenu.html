@@ -172,21 +172,21 @@ AFRAME.registerComponent('stereo', {
 
         const playToggleVideo = () => {
             console.log("play button clicked");
-            let video = document.querySelector('video');
+            let video = document.querySelector('#video');
             video.paused ? video.play() : video.pause();
             
-            let videoR = document.querySelector('videoR');
+            let videoR = document.querySelector('#videoR');
             videoR.paused ? videoR.play() : videoR.pause();
         }
 
         const stopVideo = () => {
-            let video = document.querySelector('video');
+            let video = document.querySelector('#video');
             if (video.currentTime !== 0) {
                 video.currentTime = 0;
                 video.pause();
             }
             
-            let videoR = document.querySelector('videoR');
+            let videoR = document.querySelector('#videoR');
             if (videoR.currentTime !== 0) {
                 videoR.currentTime = 0;
                 videoR.pause();
@@ -194,18 +194,18 @@ AFRAME.registerComponent('stereo', {
         };
 
         const scipAhead = () => {
-            let video = document.querySelector('video');
+            let video = document.querySelector('#video');
             video.currentTime = parseFloat(video.currentTime) + 15;
             
-            let videoR = document.querySelector('videoR');
+            let videoR = document.querySelector('#videoR');
             videoR.currentTime = parseFloat(videoR.currentTime) + 15;
         };
 
         const replay = () => {
-            let video = document.querySelector('video');
+            let video = document.querySelector('#video');
             video.currentTime = parseFloat(video.currentTime) - 15;
             
-            let videoR = document.querySelector('videoR');
+            let videoR = document.querySelector('#videoR');
             videoR.currentTime = parseFloat(videoR.currentTime) - 15;
         };
 
