@@ -125,11 +125,11 @@ AFRAME.registerComponent('stereo', {
         <!--<a-entity geometry="primitive: plane; width: 8; height: 4.5" material="color: blue" position="0 0 -4" stereo="eye:right" id='screenR'></a-entity>-->
         
 
-        <!--<a-assets>-->
-        <!--    <a-asset-item id="vene" src="scene.gltf"></a-asset-item>-->
-        <!--</a-assets>-->
+        <a-assets>
+            <a-asset-item id="vene" src="scene.gltf"></a-asset-item>
+        </a-assets>
 
-        <!--<a-entity gltf-model="#vene" position='4 0 0'></a-entity>-->
+        <a-entity gltf-model="#vene" position='4 0 0'></a-entity>
     </a-scene>
 
     
@@ -184,12 +184,14 @@ AFRAME.registerComponent('stereo', {
             if (video.currentTime !== 0) {
                 video.currentTime = 0;
                 video.pause();
+                console.log(video.paused? "videoL is paused at " + video.currentTime : "videoL is NOT paused");
             }
             
             let videoR = document.querySelector('#videoR');
             if (videoR.currentTime !== 0) {
                 videoR.currentTime = 0;
                 videoR.pause();
+                console.log(videoR.paused? "videoR is paused at " + videoR.currentTime : "videoR is NOT paused");
             }
         };
 
