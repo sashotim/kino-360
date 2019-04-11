@@ -315,6 +315,7 @@
                     });
                     
                     if(getMobileOperatingSystem() === 'iOS'){
+                        var scene = document.querySelector('a-scene');
                           scene.addEventListener('enter-vr', (event) => {
                             window.scrollTop = 0;
                           });
