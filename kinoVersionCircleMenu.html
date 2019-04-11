@@ -325,11 +325,14 @@
                     });
                     
                     if(getMobileOperatingSystem() === 'iOS'){
+                        // fix for chrome navbar in ios
                         var scene = document.querySelector('#scene');
                           scene.addEventListener('enter-vr', (event) => {
                             window.scrollTop = 0;
                           });
                     } else {
+                        console.log('recognized an android device');
+                        //fix for gzroscope in android
                         window.addEventListener("deviceorientation", function(event) {
                               var absolute = event.absolute;
                               var alpha    = event.alpha;
@@ -337,7 +340,7 @@
                               var gamma    = event.gamma;
                               
                               let strToDisplay = ' Absolute: ' + absolute + '\n Alpha: ' + alpha + '\n Beta: ' + beta + '\n Gamma: ' + gamma;
-                              
+                              console.log(strToDisplay);
                               document.querySelector('#textField').setAttribute('text', strToDisplay);
                         }, true);
                     }
