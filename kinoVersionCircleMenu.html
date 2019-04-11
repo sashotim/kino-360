@@ -92,11 +92,11 @@
 
         <a-assets>
             <img id="sky" src="/R0010192_20181001134315.JPG">
-            <video id="video" loop autoplay src="public/videos/carotisOP_L.mp4" width="1024" height="512">
+            <video id="video" loop src="public/videos/carotisOP_L.mp4" width="1024" height="512">
             <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
 
-            <video id="videoR" loop autoplay src="public/videos/carotisOP_R.mp4" width="1024" height="512">
+            <video id="videoR" loop src="public/videos/carotisOP_R.mp4" width="1024" height="512">
                 <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
         </a-assets>
@@ -144,6 +144,26 @@
                 return 'Desktop';
             }
         }
+        
+        function getMobileOperatingSystem() {
+                      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+                    
+                          // Windows Phone must come first because its UA also contains "Android"
+                        if (/windows phone/i.test(userAgent)) {
+                            return "Windows Phone";
+                        }
+                    
+                        if (/android/i.test(userAgent)) {
+                            return "Android";
+                        }
+                    
+                        // iOS detection from: http://stackoverflow.com/a/9039885/177710
+                        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                            return "iOS";
+                        }
+                    
+                        return "unknown";
+                    }
 
         class Entity {
             constructor(position, geometry, material, id) {
@@ -293,6 +313,14 @@
                             visibleControlls = true;
                         }
                     });
+                    
+                    if(getMobileOperatingSystem() === 'iOS'){
+                          scene.addEventListener('enter-vr', (event) => {
+                            window.scrollTop = 0;
+                          });
+                    }
+                    
+                    
 
                     document.querySelector('#controllsSquare').addEventListener('mouseleave', function() {
                         controllsJustRemoved = false;
