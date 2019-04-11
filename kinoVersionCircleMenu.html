@@ -117,7 +117,7 @@
 
 
         <a-entity geometry="primitive: plane; width: 2; height: 4" position="4 0 -3" look-at="[camera]" material="color: yellow">
-            <a-entity  text="value:  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus soluta aperiam dignissimos commodi sunt voluptates nam rem minus animi, consequatur veniam a modi libero perspiciatis iusto maiores autem dolor placeat.;color: black; width: 1.8; wrapCount: 20" ></a-entity>
+            <a-entity id='textField'  text="value:  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus soluta aperiam dignissimos commodi sunt voluptates nam rem minus animi, consequatur veniam a modi libero perspiciatis iusto maiores autem dolor placeat.;color: black; width: 1.8; wrapCount: 20" ></a-entity>
         </a-entity>
 
 
@@ -190,16 +190,16 @@
             console.log("play button clicked");
             let video = document.querySelector('#video');
             let videoR = document.querySelector('#videoR');
-            var promise = document.querySelector('video').play();
+            //var promise = document.querySelector('video').play();
 
-            if (promise !== undefined) {
-                promise.catch(error => {
+            //if (promise !== undefined) {
+            //    promise.catch(error => {
                     // Auto-play was prevented
                     // Show a UI element to let the user manually start playback
-                }).then(() => {
+            //    }).then(() => {
                     // Auto-play started
-                });
-            }
+            //    });
+            //}
             
            if (video.paused && videoR.paused) {
                video.play();
@@ -325,10 +325,21 @@
                     });
                     
                     if(getMobileOperatingSystem() === 'iOS'){
-                        var scene = document.querySelector('a-scene');
+                        var scene = document.querySelector('#scene');
                           scene.addEventListener('enter-vr', (event) => {
                             window.scrollTop = 0;
                           });
+                    } else {
+                        window.addEventListener("deviceorientation", function(event) {
+                              var absolute = event.absolute;
+                              var alpha    = event.alpha;
+                              var beta     = event.beta;
+                              var gamma    = event.gamma;
+                              
+                              let strToDisplay = ' Absolute: ' + absolute + '\n Alpha: ' + alpha + '\n Beta: ' + beta + '\n Gamma: ' + gamma;
+                              
+                              document.querySelector('#textField').setAttribute('text', strToDisplay);
+                        }, true);
                     }
                     
                     
