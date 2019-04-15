@@ -6,7 +6,7 @@
 
 <body>
     <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
-    <script src="/aframe-look-at-component.js"></script>
+    <!--<script src="/aframe-look-at-component.js"></script>-->
     <script>
         // Sets the 'default' eye viewed by camera in non-VR mode
 
@@ -340,7 +340,7 @@
                               
                               let strToDisplay = ' Absolute: ' + absolute + '\n Alpha: ' + alpha + '\n Beta: ' + beta + '\n Gamma: ' + gamma;
                               document.querySelector('#textField').setAttribute('text', 'value: ' + strToDisplay);
-                              document.querySelector('#camera').setAttribute('rotation', {x: alpha, y: beta, z: gamma});
+                            //   document.querySelector('#camera').setAttribute('rotation', {x: alpha, y: beta, z: gamma});
                         }, true);
                     }
                     
