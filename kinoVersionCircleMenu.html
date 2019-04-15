@@ -3,11 +3,27 @@
 <head>
     <title>Kino in 3D</title>
      <meta charset="UTF-8">
+         <style>
+       body {
+          overflow: scroll !important
+        }
+    
+        html {
+          position: relative !important
+        }
+    
+        a-scene {
+          position: fixed;
+          top: 0;
+          left: 0
+        }
+    </style>
 </head>
 
 <body>
     <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
     <script src="/aframe-look-at-component.js"></script>
+
     <script>
         // Sets the 'default' eye viewed by camera in non-VR mode
 
@@ -88,6 +104,9 @@
 
         });
     </script>
+    <div style="height:150vh;">
+    
+    </div>
     <a-scene id='scene'>
 
 
@@ -332,11 +351,13 @@
                     
                     if(getMobileOperatingSystem() === 'iOS'){
                         // fix for chrome navbar in ios
-                        var scene = document.querySelector('#scene');
-                          scene.addEventListener('enter-vr', (event) => {
+                        // var scene = document.querySelector('#scene');
+                        //   scene.addEventListener('enter-vr', (event) => {
                             document.querySelector('#textField').setAttribute('text', 'value: entered stereo mode'); 
-                            window.scrollTo(0,1);
-                          });
+                            document.addEventListener("enter-vr", function() {
+                              window.scrollTo(0,document.body.scrollHeight);
+                            });
+                        //   });
                     } else {
                         //fix for gzroscope in android
                         window.addEventListener("deviceorientation", function(event) {
