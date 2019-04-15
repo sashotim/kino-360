@@ -205,10 +205,14 @@
             
            if (video.paused && videoR.paused) {
                video.play();
+               video.setAttribute('muted', 'false');
                videoR.play()
+               videoR.setAttribute('muted', 'false');
            } else {
                video.pause();
+               video.setAttribute('muted', 'true');
                videoR.pause();
+               videoR.setAttribute('muted', 'true');
            }
                
         }
