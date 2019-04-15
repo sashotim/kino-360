@@ -335,7 +335,7 @@
                         var scene = document.querySelector('#scene');
                           scene.addEventListener('enter-vr', (event) => {
                             document.querySelector('#textField').setAttribute('text', 'value: entered stereo mode'); 
-                            window.scrollTop = 0;
+                            window.scrollTo(0,1);
                           });
                     } else {
                         //fix for gzroscope in android
