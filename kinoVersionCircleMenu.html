@@ -23,6 +23,8 @@
 <body>
     <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
     <script src="/aframe-look-at-component.js"></script>
+    <!--<script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js">-->
+    
 
     <script>
         // Sets the 'default' eye viewed by camera in non-VR mode
@@ -103,6 +105,20 @@
             },
 
         });
+        
+      AFRAME.registerComponent("foo", {
+        init: function() {
+          let anim = document.querySelector('#playlight');
+    
+          this.el.addEventListener("click", (e) => {
+            console.log("hello");
+            /* this.el.emit("bar") */
+            anim.emit("startAnimation");
+          })
+    
+        }
+      });
+        
     </script>
     <!--<div style="height:150vh;">-->
     
@@ -211,8 +227,7 @@
             scene.appendChild(tmpEntity);
         };
 
-        const playToggleVideo = () => {
-            console.log("play button clicked");
+        const playToggleVideo = (e) => {
             let video = document.querySelector('#video');
             let videoR = document.querySelector('#videoR');
             document.querySelector('#textField').setAttribute('text', 'value: clcked play button'); 
@@ -230,7 +245,7 @@
            if (video.paused && videoR.paused) {
                video.play();
                video.setAttribute('muted', 'false');
-               videoR.play()
+               videoR.play();
                videoR.setAttribute('muted', 'false');
            } else {
                video.pause();
@@ -238,9 +253,19 @@
                videoR.pause();
                videoR.setAttribute('muted', 'true');
            }
+           
+        //   changeView(e);
                
-        }
+        };
 
+        // function changeView(e) {
+        //     // var animation = document.querySelector('#' + e.target.id + 'light').children[0];
+        //     var animation = document.querySelector('a-animation');
+        //     animation.emit("startAnimation");
+        //     console.log(view.emit("startAnimation"));
+        // }
+        
+        
         const stopVideo = () => {
             let video = document.querySelector('#video');
             let videoR = document.querySelector('#videoR');
@@ -270,65 +295,63 @@
             videoR.currentTime = parseFloat(videoR.currentTime) - 15;
         };
 
-        const zoomIn = () => {
-            var camera = document.querySelector('#camera');
-            camera.setAttribute('zoom', parseFloat(camera.getAttribute('zoom')) + 0.25);
-        };
+        // const zoomIn = () => {
+        //     var camera = document.querySelector('#camera');
+        //     camera.setAttribute('zoom', parseFloat(camera.getAttribute('zoom')) + 0.25);
+        // };
 
-        const zoomOut = () => {
-            var camera = document.querySelector('#camera');
-            camera.setAttribute('zoom', parseFloat(camera.getAttribute('zoom')) - 0.25);
-        };
+        // const zoomOut = () => {
+        //     var camera = document.querySelector('#camera');
+        //     camera.setAttribute('zoom', parseFloat(camera.getAttribute('zoom')) - 0.25);
+        // };
 
         const makeControlls = (optionsArr) => {
-            // let cursorPosition = event.detail.intersection.point;
-            // cursorPosition.z += 1;
-            let center = new Entity('0 0 0.1', 'primitive: circle; radius: 0.2', 'color: red', 'center');
-            renderEntity(center, 'controllsSquare');
-            document.querySelector('#center').addEventListener('click', function() {
-                if (visibleControlls) {
-                    hideControlls();
-                    visibleControlls = false;
-                    controllsJustRemoved = true;
-                }
-            });
-            document.querySelector('#center').setAttribute('look-at', '[camera]');
 
             let actionCirclesPositions = [
-                { name: 'play', position: '0 1.8 0', callback: playToggleVideo },
-                { name: 'zoomIn', position: '0 -1.1 0', callback: zoomIn },
-                { name: 'zoomOut', position: '0 -0.4 0', callback: zoomOut },
-                { name: 'scip', position: '0 1.1 0', callback: scipAhead },
-                { name: 'replay', position: '0 0.4 0', callback: replay },
-                { name: 'stop', position: '0 -1.8 0', callback: stopVideo }
+                { name: 'play', position: {x:-0.35, y:5.5, z:1.2}, callback: playToggleVideo },
+                // { name: 'zoomIn', position: '0 -1.1 0', callback: zoomIn },
+                // { name: 'zoomOut', position: '0 -0.4 0', callback: zoomOut },
+                { name: 'scip', position: {x:-0.35, y:3.7, z:1.2} , callback: scipAhead },
+                { name: 'replay', position: {x:-0.35, y:2.8, z:1.2}, callback: replay },
+                { name: 'stop', position: {x:-0.35, y:4.6, z:1.2}, callback: stopVideo }
             ];
             actionCirclesPositions.forEach(function(action) {
-                renderEntity(new Entity(action.position, 'primitive: plane; width: 0.5; height: 0.5', 'color: yellow', action.name), 'center');
-                let text = document.createElement('a-text');
-
-                document.querySelector('#' + action.name).appendChild(text);
-                text.setAttribute('value', action.name);
-                text.setAttribute('scale', '0.5');
-                text.setAttribute('position', '-0.2 0 0');
-                text.setAttribute('color', 'black');
+                renderEntity(new Entity(action.position, 'primitive: plane; width: 0.6; height: 0.6', 'color: yellow', action.name), 'controllsSquare');
+                document.querySelector('#' + action.name).setAttribute('rotation', '0 45 0');
+                document.querySelector('#' + action.name).setAttribute('visible', 'false');
+                document.querySelector('#' + action.name).setAttribute('foo', '');
+                
+                
+                renderEntity(new Entity(action.position, 'primitive: plane; width: 0.8; height: 1', 'color: #a4f442; opacity: 1', action.name + 'light'), 'controllsSquare');
+                let light = document.querySelector('#' + action.name + 'light');
+                light.setAttribute('rotation', '0 45 0');
+                let lightPosition = action.position;
+                lightPosition.x -= 0.5;
+                lightPosition.y += 0.35;
+                lightPosition.z -= 0.5;
+                
+                light.setAttribute('position', lightPosition);
+                
+                let tmpEntity = document.createElement('a-animation');
+                tmpEntity.setAttribute('attribute', "position");
+                tmpEntity.setAttribute('dur', "1000");
+                tmpEntity.setAttribute('fill', "forwards");
+                tmpEntity.setAttribute('to', "1 5 6");
+                tmpEntity.setAttribute('begin', "startAnimation");
+                
+                // light.appendChild(tmpEntity);
+                
+                // let text = document.createElement('a-text');
+                // document.querySelector('#' + action.name).appendChild(text);
+                // text.setAttribute('value', action.name);
+                // text.setAttribute('scale', '0.5');
+                // text.setAttribute('position', '-0.2 0 0');
+                // text.setAttribute('color', 'black');
+                
                 document.querySelector('#' + action.name).addEventListener('click', action.callback);
             });
         };
-        const hideControlls = () => {
-            document.querySelector('#center').setAttribute('position', '0 0 -1');
-        };
-
-        const showControlls = () => {
-            document.querySelector('#center').setAttribute('position', '0 0 0.2');
-        };
-
-
         const main = () => {
-
-            // let controllsSquare = new Entity('-4.25 0 -2.55', 'primitive: plane; width: 1; height: 4.5', 'color: lightgray', 'controllsSquare');
-            // renderEntity(controllsSquare, 'scene');
-            document.querySelector('#controllsSquare').setAttribute('look-at', '[camera]');
-
 
             makeControlls('placeholder');
             visibleControlls = true;
@@ -377,20 +400,13 @@
                             //   document.querySelector('#camera').setAttribute('rotation', {x: alpha, y: beta, z: gamma});
                         }, true);
                     }
-                    
-                    
-
-                    document.querySelector('#controllsSquare').addEventListener('mouseleave', function() {
-                        controllsJustRemoved = false;
-                    });
                     break;
             }
         };
 
 
         let visibleControlls = false;
-        let controllsJustRemoved = false;
-        // main();
+        main();
     </script>
 </body>
 
