@@ -141,11 +141,16 @@
         </a-entity>
 
 
-        <!--<a-assets>-->
-        <!--    <a-asset-item id="vene" src="scene.gltf"></a-asset-item>-->
-        <!--</a-assets>-->
+        <a-assets>
+            <a-asset-item id="menu" src="/menu/Menu-Variante-1-favorit.gltf"></a-asset-item>
+            <!--<a-asset-item id="menu" src="menu/Menu-Variante-2.gltf"></a-asset-item>-->
+            <!--<a-asset-item id="menu" src="menu/Menu-Variante-3.gltf"></a-asset-item>-->
+            <!--<a-asset-item id="menu" src="menu/Menu-Variante-4.gltf"></a-asset-item>-->
+            <!--<a-asset-item id="menu" src="menu/Menu-Variante-5.gltf"></a-asset-item>-->
+            <!--<a-asset-item id="menu" src="menu/Menu-Variante-6.gltf"></a-asset-item>-->
+        </a-assets>
 
-        <!--<a-entity gltf-model="#vene" position='4 0 0'></a-entity>-->
+        <a-entity gltf-model="#menu" position='-4 -2.75 -6.5' id='controllsSquare' scale='1 0.8 1'></a-entity>
     </a-scene>
 
 
@@ -287,7 +292,7 @@
                     controllsJustRemoved = true;
                 }
             });
-            // document.querySelector('#center').setAttribute('look-at', '[camera]');
+            document.querySelector('#center').setAttribute('look-at', '[camera]');
 
             let actionCirclesPositions = [
                 { name: 'play', position: '0 1.8 0', callback: playToggleVideo },
@@ -320,8 +325,8 @@
 
         const main = () => {
 
-            let controllsSquare = new Entity('-4.25 0 -2.55', 'primitive: plane; width: 1; height: 4.5', 'color: lightgray', 'controllsSquare');
-            renderEntity(controllsSquare, 'scene');
+            // let controllsSquare = new Entity('-4.25 0 -2.55', 'primitive: plane; width: 1; height: 4.5', 'color: lightgray', 'controllsSquare');
+            // renderEntity(controllsSquare, 'scene');
             document.querySelector('#controllsSquare').setAttribute('look-at', '[camera]');
 
 
@@ -330,6 +335,7 @@
 
             switch (getPlatformType()) {
                 case 'Desktop':
+                    console.log('device is a desktop')
                     document.querySelector('#cursor').setAttribute('cursor', 'rayOrigin: mouse; fuse: false');
                     document.querySelector('#cursor').setAttribute('visible', 'false');
 
@@ -384,7 +390,7 @@
 
         let visibleControlls = false;
         let controllsJustRemoved = false;
-        main();
+        // main();
     </script>
 </body>
 
