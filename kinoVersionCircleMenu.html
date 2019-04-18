@@ -106,19 +106,6 @@
 
         });
         
-      AFRAME.registerComponent("foo", {
-        init: function() {
-          let anim = document.querySelector('#playlight');
-    
-          this.el.addEventListener("click", (e) => {
-            console.log("hello");
-            /* this.el.emit("bar") */
-            anim.emit("startAnimation");
-          })
-    
-        }
-      });
-        
     </script>
     <!--<div style="height:150vh;">-->
     
@@ -136,7 +123,13 @@
                 <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
         </a-assets>
-        <a-sky src="#sky"></a-sky>
+        <a-mixin id="option"
+                 event-proxy="listen: click; target: #sky"
+                 event-set__enter="_event: mouseenter; material.color: #EEE"
+                 event-set__leave="_event: mouseleave; material.color: #333"></a-mixin>
+        <a-sky src="#sky" animation__color="property: color; dir: alternate; dur: 1000;
+                            easing: easeInSine; loop: true; to: #CCC;
+                            startEvents: color;"></a-sky>
 
         <!--<a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>-->
         <!--<a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>-->
@@ -148,7 +141,7 @@
             </a-entity>
         </a-camera>
 
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -6" stereo="eye:left" id='screen'></a-entity>
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -6" stereo="eye:left" id='screen' mixin="option" event-proxy="emit: color"></a-entity>
         <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -6" stereo="eye:right"></a-entity>
 
 
@@ -167,6 +160,7 @@
         </a-assets>
 
         <a-entity gltf-model="#menu" position='-4 -2.75 -6.5' id='controllsSquare' scale='1 0.8 1'></a-entity>
+       
     </a-scene>
 
 
@@ -319,10 +313,11 @@
                 renderEntity(new Entity(action.position, 'primitive: plane; width: 0.6; height: 0.6', 'color: yellow', action.name), 'controllsSquare');
                 document.querySelector('#' + action.name).setAttribute('rotation', '0 45 0');
                 document.querySelector('#' + action.name).setAttribute('visible', 'false');
-                document.querySelector('#' + action.name).setAttribute('foo', '');
+                document.querySelector('#' + action.name).setAttribute('mixin', 'option');
+                document.querySelector('#' + action.name).setAttribute('event-proxy', 'emit: startAnimation');
                 
                 
-                renderEntity(new Entity(action.position, 'primitive: plane; width: 0.8; height: 1', 'color: #a4f442; opacity: 1', action.name + 'light'), 'controllsSquare');
+                renderEntity(new Entity(action.position, 'primitive: plane; width: 0.8; height: 1', 'color: #a4f442', action.name + 'light'), 'controllsSquare');
                 let light = document.querySelector('#' + action.name + 'light');
                 light.setAttribute('rotation', '0 45 0');
                 let lightPosition = action.position;
@@ -332,12 +327,8 @@
                 
                 light.setAttribute('position', lightPosition);
                 
-                let tmpEntity = document.createElement('a-animation');
-                tmpEntity.setAttribute('attribute', "position");
-                tmpEntity.setAttribute('dur', "1000");
-                tmpEntity.setAttribute('fill', "forwards");
-                tmpEntity.setAttribute('to', "1 5 6");
-                tmpEntity.setAttribute('begin', "startAnimation");
+                light.setAttribute('animation__color', "property: opacity; dir: alternate; dur: 200;easing: easeInOutSine; loop: false; to: 1;startEvents: color; pauseEvents: animationPause;resumeEvents: animationResume; restartEvents: animationRestart");
+                // tmpEntity.setAttribute('begin', "startAnimation");
                 
                 // light.appendChild(tmpEntity);
                 
