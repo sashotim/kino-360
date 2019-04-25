@@ -23,6 +23,12 @@
 <body>
     <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
     <script src="/aframe-look-at-component.js"></script>
+
+    
+    <!--    <script src="../build.js"></script>-->
+    <!--<script src="https://rawgit.com/aframevr/aframe/6019885/dist/aframe-master.min.js"></script>-->
+    <!--<script src="../../dist/aframe-animation-component.min.js"></script>-->
+    <!--<script src="components/event-proxy.js"></script>-->
     <!--<script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js">-->
     
 
@@ -106,6 +112,21 @@
 
         });
         
+        AFRAME.registerComponent('event-proxy', {
+          schema: {
+            listen: {default: ''},
+            target: {type: 'selector'},
+            emit: {default: ''}
+          },
+        
+          update: function () {
+            var data = this.data;
+            this.el.addEventListener(data.listen, function () {
+              data.target.emit(data.emit);
+            });
+          }
+        });
+        
     </script>
     <!--<div style="height:150vh;">-->
     
@@ -123,13 +144,9 @@
                 <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
         </a-assets>
-        <a-mixin id="option"
-                 event-proxy="listen: click; target: #sky"
-                 event-set__enter="_event: mouseenter; material.color: #EEE"
-                 event-set__leave="_event: mouseleave; material.color: #333"></a-mixin>
-        <a-sky src="#sky" animation__color="property: color; dir: alternate; dur: 1000;
-                            easing: easeInSine; loop: true; to: #CCC;
-                            startEvents: color;"></a-sky>
+                            
+                            
+        
 
         <!--<a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>-->
         <!--<a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>-->
@@ -141,13 +158,13 @@
             </a-entity>
         </a-camera>
 
-        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -6" stereo="eye:left" id='screen' mixin="option" event-proxy="emit: color"></a-entity>
+        <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #video" position="0 0 -6" stereo="eye:left" id='screen' event-proxy="listen: mousenter; target: e-sky;emit: dimm"></a-entity>
         <a-entity geometry="primitive: plane; width: 8; height: 4.5" material="src: #videoR" position="0 0 -6" stereo="eye:right"></a-entity>
 
 
-        <a-entity geometry="primitive: plane; width: 2; height: 4" position="4 0 -3" look-at="[camera]" material="color: yellow">
-            <a-entity id='textField'  text="value:  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus soluta aperiam dignissimos commodi sunt voluptates nam rem minus animi, consequatur veniam a modi libero perspiciatis iusto maiores autem dolor placeat.;color: black; width: 1.8; wrapCount: 20" ></a-entity>
-        </a-entity>
+        <!--<a-entity geometry="primitive: plane; width: 2; height: 4" position="4 0 -3" look-at="[camera]" material="color: yellow">-->
+        <!--    <a-entity id='textField'  text="value:  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus soluta aperiam dignissimos commodi sunt voluptates nam rem minus animi, consequatur veniam a modi libero perspiciatis iusto maiores autem dolor placeat.;color: black; width: 1.8; wrapCount: 20" ></a-entity>-->
+        <!--</a-entity>-->
 
 
         <a-assets>
@@ -161,6 +178,23 @@
 
         <a-entity gltf-model="#menu" position='-4 -2.75 -6.5' id='controllsSquare' scale='1 0.8 1'></a-entity>
        
+        <a-entity id="container" position="0 0 0">
+        <a-sphere
+          id="testContainer" color="#fff" height="3" radius="5000" side="back" src="#sky"
+            animation__color="property: color; dir: alternate; dur: 1000;
+                            easing: easeInSine; loop: false; to: #555;
+                            startEvents: color; pauseEvents: animationPause;
+                            resumeEvents: animationResume; restartEvents: animationRestart"
+            animation__color1="property: color; dir: alternate; dur: 1000;
+                            easing: easeInSine; loop: false; to: #fff;
+                            startEvents: color1; pauseEvents: animationPause;
+                            resumeEvents: animationResume; restartEvents: animationRestart"
+          position="0 1 -2">
+        </a-sphere>
+        
+        
+        <a-box id='dimm' position='0 0 -5.9' width='8' height="4.5" depth="0.01" visible="false" event-proxy="listen: mouseenter; target: #testContainer; emit: color"></a-box>
+        <a-box id='undimm' position='0 0 -7' width='8' height="4.5" depth="0.01" visible="false" event-proxy="listen: mouseleave; target: #testContainer; emit: color1"></a-box>
     </a-scene>
 
 
@@ -224,7 +258,7 @@
         const playToggleVideo = (e) => {
             let video = document.querySelector('#video');
             let videoR = document.querySelector('#videoR');
-            document.querySelector('#textField').setAttribute('text', 'value: clcked play button'); 
+            // document.querySelector('#textField').setAttribute('text', 'value: clcked play button'); 
             //var promise = document.querySelector('video').play();
 
             //if (promise !== undefined) {
@@ -327,17 +361,8 @@
                 
                 light.setAttribute('position', lightPosition);
                 
-                light.setAttribute('animation__color', "property: opacity; dir: alternate; dur: 200;easing: easeInOutSine; loop: false; to: 1;startEvents: color; pauseEvents: animationPause;resumeEvents: animationResume; restartEvents: animationRestart");
-                // tmpEntity.setAttribute('begin', "startAnimation");
+                light.setAttribute('animation__color', "property: opacity; dir: alternate; dur: 200;easing: easeInOutSine; loop: false; to: 1;startEvents: color;");
                 
-                // light.appendChild(tmpEntity);
-                
-                // let text = document.createElement('a-text');
-                // document.querySelector('#' + action.name).appendChild(text);
-                // text.setAttribute('value', action.name);
-                // text.setAttribute('scale', '0.5');
-                // text.setAttribute('position', '-0.2 0 0');
-                // text.setAttribute('color', 'black');
                 
                 document.querySelector('#' + action.name).addEventListener('click', action.callback);
             });
@@ -373,7 +398,7 @@
                         // fix for chrome navbar in ios
                         // var scene = document.querySelector('#scene');
                         //   scene.addEventListener('enter-vr', (event) => {
-                            document.querySelector('#textField').setAttribute('text', 'value: entered stereo mode'); 
+                            // document.querySelector('#textField').setAttribute('text', 'value: entered stereo mode'); 
                             // document.addEventListener("enter-vr", function() {
                             //   window.scrollTo(0,document.body.scrollHeight);
                             // });
@@ -393,9 +418,26 @@
                     }
                     break;
             }
+            
+            let dim = document.querySelector('#dimm');
+            let undim = document.querySelector('#undimm');
+            
+            dim.addEventListener('mouseenter', function(e){
+               dim.setAttribute('position', '0 0 -7');
+               undim.setAttribute('position', '0 0 -5.9');
+            });
+            
+            undim.addEventListener('mouseleave', function(e){
+               dim.setAttribute('position', '0 0 -5.9');
+               undim.setAttribute('position', '0 0 -7');
+            });
         };
-
-
+        
+        // var event = new Event('go');
+        // document.querySelector('#animationTest1').addEventListener('click', function(){
+        //     console.log(document.querySelector('#animationTest').el.emit('animationbegin', this.eventDetail))
+        // })
+        
         let visibleControlls = false;
         main();
     </script>
