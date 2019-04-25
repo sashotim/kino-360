@@ -2,8 +2,8 @@
 
 <head>
     <title>Kino in 3D</title>
-     <meta charset="UTF-8">
-         <!--<style>
+    <meta charset="UTF-8">
+    <!--<style>
        /*body {*/
        /*   overflow: scroll !important*/
        /* }*/
@@ -24,13 +24,13 @@
     <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
     <script src="/aframe-look-at-component.js"></script>
 
-    
+
     <!--    <script src="../build.js"></script>-->
     <!--<script src="https://rawgit.com/aframevr/aframe/6019885/dist/aframe-master.min.js"></script>-->
     <!--<script src="../../dist/aframe-animation-component.min.js"></script>-->
     <!--<script src="components/event-proxy.js"></script>-->
     <!--<script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js">-->
-    
+
 
     <script>
         // Sets the 'default' eye viewed by camera in non-VR mode
@@ -111,25 +111,24 @@
             },
 
         });
-        
+
         AFRAME.registerComponent('event-proxy', {
-          schema: {
-            listen: {default: ''},
-            target: {type: 'selector'},
-            emit: {default: ''}
-          },
-        
-          update: function () {
-            var data = this.data;
-            this.el.addEventListener(data.listen, function () {
-              data.target.emit(data.emit);
-            });
-          }
+            schema: {
+                listen: { default: '' },
+                target: { type: 'selector' },
+                emit: { default: '' }
+            },
+
+            update: function() {
+                var data = this.data;
+                this.el.addEventListener(data.listen, function() {
+                    data.target.emit(data.emit);
+                });
+            }
         });
-        
     </script>
     <!--<div style="height:150vh;">-->
-    
+
     <!--</div>-->
     <a-scene id='scene'>
 
@@ -144,9 +143,9 @@
                 <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
         </a-assets>
-                            
-                            
-        
+
+
+
 
         <!--<a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>-->
         <!--<a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>-->
@@ -177,24 +176,21 @@
         </a-assets>
 
         <a-entity gltf-model="#menu" position='-4 -2.75 -6.5' id='controllsSquare' scale='1 0.8 1'></a-entity>
-       
+
         <a-entity id="container" position="0 0 0">
-        <a-sphere
-          id="testContainer" color="#fff" height="3" radius="5000" side="back" src="#sky"
-            animation__color="property: color; dir: alternate; dur: 1000;
+            <a-sphere id="testContainer" color="#fff" height="3" radius="5000" side="back" src="#sky" animation__color="property: color; dir: alternate; dur: 1000;
                             easing: easeInSine; loop: false; to: #555;
                             startEvents: color; pauseEvents: animationPause;
-                            resumeEvents: animationResume; restartEvents: animationRestart"
-            animation__color1="property: color; dir: alternate; dur: 1000;
+                            resumeEvents: animationResume; restartEvents: animationRestart" animation__color1="property: color; dir: alternate; dur: 1000;
                             easing: easeInSine; loop: false; to: #fff;
                             startEvents: color1; pauseEvents: animationPause;
-                            resumeEvents: animationResume; restartEvents: animationRestart"
-          position="0 1 -2">
-        </a-sphere>
-        
-        
-        <a-box id='dimm' position='0 0 -5.9' width='8' height="4.5" depth="0.01" visible="false" event-proxy="listen: mouseenter; target: #testContainer; emit: color"></a-box>
-        <a-box id='undimm' position='0 0 -7' width='8' height="4.5" depth="0.01" visible="false" event-proxy="listen: mouseleave; target: #testContainer; emit: color1"></a-box>
+                            resumeEvents: animationResume; restartEvents: animationRestart" position="0 1 -2">
+            </a-sphere>
+
+
+            <a-box id='dimm' position='0 0 -5.9' width='8' height="4.5" depth="0.01" visible="false" event-proxy="listen: mouseenter; target: #testContainer; emit: color"></a-box>
+            <a-box id='undimm' position='0 0 -7' width='8' height="4.5" depth="0.01" visible="false" event-proxy="listen: mouseleave; target: #testContainer; emit: color1"></a-box>
+            </a-entity>
     </a-scene>
 
 
@@ -213,26 +209,26 @@
                 return 'Desktop';
             }
         }
-        
+
         function getMobileOperatingSystem() {
-                      var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-                    
-                          // Windows Phone must come first because its UA also contains "Android"
-                        if (/windows phone/i.test(userAgent)) {
-                            return "Windows Phone";
-                        }
-                    
-                        if (/android/i.test(userAgent)) {
-                            return "Android";
-                        }
-                    
-                        // iOS detection from: http://stackoverflow.com/a/9039885/177710
-                        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                            return "iOS";
-                        }
-                    
-                        return "unknown";
-                    }
+            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Windows Phone must come first because its UA also contains "Android"
+            if (/windows phone/i.test(userAgent)) {
+                return "Windows Phone";
+            }
+
+            if (/android/i.test(userAgent)) {
+                return "Android";
+            }
+
+            // iOS detection from: http://stackoverflow.com/a/9039885/177710
+            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return "iOS";
+            }
+
+            return "unknown";
+        }
 
         class Entity {
             constructor(position, geometry, material, id) {
@@ -263,27 +259,28 @@
 
             //if (promise !== undefined) {
             //    promise.catch(error => {
-                    // Auto-play was prevented
-                    // Show a UI element to let the user manually start playback
+            // Auto-play was prevented
+            // Show a UI element to let the user manually start playback
             //    }).then(() => {
-                    // Auto-play started
+            // Auto-play started
             //    });
             //}
-            
-           if (video.paused && videoR.paused) {
-               video.play();
-               video.setAttribute('muted', 'false');
-               videoR.play();
-               videoR.setAttribute('muted', 'false');
-           } else {
-               video.pause();
-               video.setAttribute('muted', 'true');
-               videoR.pause();
-               videoR.setAttribute('muted', 'true');
-           }
-           
-        //   changeView(e);
-               
+
+            if (video.paused && videoR.paused) {
+                video.play();
+                video.setAttribute('muted', 'false');
+                videoR.play();
+                videoR.setAttribute('muted', 'false');
+            }
+            else {
+                video.pause();
+                video.setAttribute('muted', 'true');
+                videoR.pause();
+                videoR.setAttribute('muted', 'true');
+            }
+
+            //   changeView(e);
+
         };
 
         // function changeView(e) {
@@ -292,8 +289,8 @@
         //     animation.emit("startAnimation");
         //     console.log(view.emit("startAnimation"));
         // }
-        
-        
+
+
         const stopVideo = () => {
             let video = document.querySelector('#video');
             let videoR = document.querySelector('#videoR');
@@ -310,7 +307,7 @@
         const scipAhead = () => {
             let video = document.querySelector('#video');
             let videoR = document.querySelector('#videoR');
-            
+
             video.currentTime = parseFloat(video.currentTime) + 15;
             videoR.currentTime = parseFloat(videoR.currentTime) + 15;
         };
@@ -318,7 +315,7 @@
         const replay = () => {
             let video = document.querySelector('#video');
             let videoR = document.querySelector('#videoR');
-            
+
             video.currentTime = parseFloat(video.currentTime) - 15;
             videoR.currentTime = parseFloat(videoR.currentTime) - 15;
         };
@@ -336,12 +333,12 @@
         const makeControlls = (optionsArr) => {
 
             let actionCirclesPositions = [
-                { name: 'play', position: {x:-0.35, y:5.5, z:1.2}, callback: playToggleVideo },
+                { name: 'play', position: { x: -0.35, y: 5.5, z: 1.2 }, callback: playToggleVideo },
                 // { name: 'zoomIn', position: '0 -1.1 0', callback: zoomIn },
                 // { name: 'zoomOut', position: '0 -0.4 0', callback: zoomOut },
-                { name: 'scip', position: {x:-0.35, y:3.7, z:1.2} , callback: scipAhead },
-                { name: 'replay', position: {x:-0.35, y:2.8, z:1.2}, callback: replay },
-                { name: 'stop', position: {x:-0.35, y:4.6, z:1.2}, callback: stopVideo }
+                { name: 'scip', position: { x: -0.35, y: 3.7, z: 1.2 }, callback: scipAhead },
+                { name: 'replay', position: { x: -0.35, y: 2.8, z: 1.2 }, callback: replay },
+                { name: 'stop', position: { x: -0.35, y: 4.6, z: 1.2 }, callback: stopVideo }
             ];
             actionCirclesPositions.forEach(function(action) {
                 renderEntity(new Entity(action.position, 'primitive: plane; width: 0.6; height: 0.6', 'color: yellow', action.name), 'controllsSquare');
@@ -349,8 +346,8 @@
                 document.querySelector('#' + action.name).setAttribute('visible', 'false');
                 document.querySelector('#' + action.name).setAttribute('mixin', 'option');
                 document.querySelector('#' + action.name).setAttribute('event-proxy', 'emit: startAnimation');
-                
-                
+
+
                 renderEntity(new Entity(action.position, 'primitive: plane; width: 0.8; height: 1', 'color: #a4f442', action.name + 'light'), 'controllsSquare');
                 let light = document.querySelector('#' + action.name + 'light');
                 light.setAttribute('rotation', '0 45 0');
@@ -358,12 +355,12 @@
                 lightPosition.x -= 0.5;
                 lightPosition.y += 0.35;
                 lightPosition.z -= 0.5;
-                
+
                 light.setAttribute('position', lightPosition);
-                
-                light.setAttribute('animation__color', "property: opacity; dir: alternate; dur: 200;easing: easeInOutSine; loop: false; to: 1;startEvents: color;");
-                
-                
+
+                light.setAttribute('animation__color', "property: opacity; dir: alternate; dur: 200; easing: easeInOutSine; loop: false; to: 1;startEvents: color;");
+
+
                 document.querySelector('#' + action.name).addEventListener('click', action.callback);
             });
         };
@@ -393,51 +390,52 @@
                             visibleControlls = true;
                         }
                     });
-                    
-                    if(getMobileOperatingSystem() === 'iOS'){
+
+                    if (getMobileOperatingSystem() === 'iOS') {
                         // fix for chrome navbar in ios
                         // var scene = document.querySelector('#scene');
                         //   scene.addEventListener('enter-vr', (event) => {
-                            // document.querySelector('#textField').setAttribute('text', 'value: entered stereo mode'); 
-                            // document.addEventListener("enter-vr", function() {
-                            //   window.scrollTo(0,document.body.scrollHeight);
-                            // });
+                        // document.querySelector('#textField').setAttribute('text', 'value: entered stereo mode'); 
+                        // document.addEventListener("enter-vr", function() {
+                        //   window.scrollTo(0,document.body.scrollHeight);
+                        // });
                         //   });
-                    } else {
+                    }
+                    else {
                         //fix for gzroscope in android
                         window.addEventListener("deviceorientation", function(event) {
-                              var absolute = event.absolute;
-                              var alpha    = event.alpha;
-                              var beta     = event.beta;
-                              var gamma    = event.gamma;
-                              
-                              let strToDisplay = ' Absolute: ' + absolute + '\n Alpha: ' + alpha + '\n Beta: ' + beta + '\n Gamma: ' + gamma;
-                              document.querySelector('#textField').setAttribute('text', 'value: ' + strToDisplay);
+                            var absolute = event.absolute;
+                            var alpha = event.alpha;
+                            var beta = event.beta;
+                            var gamma = event.gamma;
+
+                            let strToDisplay = ' Absolute: ' + absolute + '\n Alpha: ' + alpha + '\n Beta: ' + beta + '\n Gamma: ' + gamma;
+                            document.querySelector('#textField').setAttribute('text', 'value: ' + strToDisplay);
                             //   document.querySelector('#camera').setAttribute('rotation', {x: alpha, y: beta, z: gamma});
                         }, true);
                     }
                     break;
             }
-            
+
             let dim = document.querySelector('#dimm');
             let undim = document.querySelector('#undimm');
-            
-            dim.addEventListener('mouseenter', function(e){
-               dim.setAttribute('position', '0 0 -7');
-               undim.setAttribute('position', '0 0 -5.9');
+
+            dim.addEventListener('mouseenter', function(e) {
+                dim.setAttribute('position', '0 0 -7');
+                undim.setAttribute('position', '0 0 -5.9');
             });
-            
-            undim.addEventListener('mouseleave', function(e){
-               dim.setAttribute('position', '0 0 -5.9');
-               undim.setAttribute('position', '0 0 -7');
+
+            undim.addEventListener('mouseleave', function(e) {
+                dim.setAttribute('position', '0 0 -5.9');
+                undim.setAttribute('position', '0 0 -7');
             });
         };
-        
+
         // var event = new Event('go');
         // document.querySelector('#animationTest1').addEventListener('click', function(){
         //     console.log(document.querySelector('#animationTest').el.emit('animationbegin', this.eventDetail))
         // })
-        
+
         let visibleControlls = false;
         main();
     </script>
