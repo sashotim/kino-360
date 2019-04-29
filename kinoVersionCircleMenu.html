@@ -174,10 +174,41 @@
             <!--<a-asset-item id="menu" src="menu/Menu-Variante-5.gltf"></a-asset-item>-->
             <!--<a-asset-item id="menu" src="menu/Menu-Variante-6.gltf"></a-asset-item>-->
         </a-assets>
-
-        <a-entity gltf-model="#menu" position='-4 -2.75 -6.5' id='controllsSquare' scale='1 0.8 1'></a-entity>
-
+        
         <a-entity id="container" position="0 0 0">
+
+        <a-entity gltf-model="#menu" position='-4 -2.75 -6.5' id='controllsSquare' scale='1 0.8 1'>
+            <a-box id='play' position='-0.35 5.5 1.2' rotation='0 45 0' width='0.6' height="0.6" depth="0.01" visible='false' event-proxy="listen: click; target: #playlight; emit: blinkPlay"></a-box>
+            <a-box id='stop' position='-0.35 4.6 1.2' rotation='0 45 0' width='0.6' height="0.6" depth="0.01" visible='false' event-proxy="listen: click; target: #stoplight; emit: blinkStop"></a-box>
+            <a-box id='scip' position='-0.35 3.7 1.2' rotation='0 45 0' width='0.6' height="0.6" depth="0.01" visible='false' event-proxy="listen: click; target: #sciplight; emit: blinkScip"></a-box>
+            <a-box id='replay' position='-0.35 2.8 1.2' rotation='0 45 0' width='0.6' height="0.6" depth="0.01" visible='false' event-proxy="listen: click; target: #replaylight; emit: blinkReplay"></a-box>
+            
+            <a-box id='playlight' position='-0.85 5.85 0.7' rotation='0 45 0' color="#a4f442" opacity="0" width="0.8" height="1" depth="0.01" animation__color="property: opacity; dir: alternate; dur: 100;
+                   easing: easeInSine; loop: false; to: 1;
+                   startEvents: blinkPlay" animation__color1="property: opacity; dir: alternate; dur: 200; delay: 100;
+                   easing: easeInSine; loop: false; to: 0;
+                   startEvents: blinkPlay; pauseEvents: animationPause;
+                   resumeEvents: animationResume; restartEvents: animationRestart" ></a-box>
+            <a-box id='stoplight' position='-0.85 4.95 0.7' rotation='0 45 0' material="color: #a4f442; opacity: 0" geometry="primitive: plane; width: 0.8; height: 1" animation__color="property: opacity; dir: alternate; dur: 100;
+                   easing: easeInSine; loop: false; to: 1;
+                   startEvents: blinkStop" animation__color1="property: opacity; dir: alternate; dur: 200; delay: 100;
+                   easing: easeInSine; loop: false; to: 0;
+                   startEvents: blinkStop; pauseEvents: animationPause;
+                   resumeEvents: animationResume; restartEvents: animationRestart" ></a-box>
+            <a-box id='sciplight' position='-0.85 4.05 0.7' rotation='0 45 0' material="color: #a4f442; opacity: 0" geometry="primitive: plane; width: 0.8; height: 1" animation__color="property: opacity; dir: alternate; dur: 100;
+                   easing: easeInSine; loop: false; to: 1;
+                   startEvents: blinkScip" animation__color1="property: opacity; dir: alternate; dur: 200; delay: 100;
+                   easing: easeInSine; loop: false; to: 0;
+                   startEvents: blinkScip; pauseEvents: animationPause;
+                   resumeEvents: animationResume; restartEvents: animationRestart" ></a-box>
+            <a-box id='replaylight' position='-0.85 3.15 0.7' rotation='0 45 0' material="color: #a4f442; opacity: 0" geometry="primitive: plane; width: 0.8; height: 1" animation__color="property: opacity; dir: alternate; dur: 100;
+                   easing: easeInSine; loop: false; to: 1;
+                   startEvents: blinkReplay" animation__color1="property: opacity; dir: alternate; dur: 200; delay: 100;
+                   easing: easeInSine; loop: false; to: 0;
+                   startEvents: blinkReplay; pauseEvents: animationPause;
+                   resumeEvents: animationResume; restartEvents: animationRestart" ></a-box>
+        </a-entity>
+        
             <a-sphere id="testContainer" color="#fff" height="3" radius="5000" side="back" src="#sky" animation__color="property: color; dir: alternate; dur: 1000;
                             easing: easeInSine; loop: false; to: #555;
                             startEvents: color; pauseEvents: animationPause;
@@ -190,7 +221,8 @@
 
             <a-box id='dimm' position='0 0 -5.9' width='8' height="4.5" depth="0.01" visible="false" event-proxy="listen: mouseenter; target: #testContainer; emit: color"></a-box>
             <a-box id='undimm' position='0 0 -7' width='8' height="4.5" depth="0.01" visible="false" event-proxy="listen: mouseleave; target: #testContainer; emit: color1"></a-box>
-            </a-entity>
+            
+        </a-entity>
     </a-scene>
 
 
@@ -333,34 +365,14 @@
         const makeControlls = (optionsArr) => {
 
             let actionCirclesPositions = [
-                { name: 'play', position: { x: -0.35, y: 5.5, z: 1.2 }, callback: playToggleVideo },
+                { name: 'play', callback: playToggleVideo },
                 // { name: 'zoomIn', position: '0 -1.1 0', callback: zoomIn },
                 // { name: 'zoomOut', position: '0 -0.4 0', callback: zoomOut },
-                { name: 'scip', position: { x: -0.35, y: 3.7, z: 1.2 }, callback: scipAhead },
-                { name: 'replay', position: { x: -0.35, y: 2.8, z: 1.2 }, callback: replay },
-                { name: 'stop', position: { x: -0.35, y: 4.6, z: 1.2 }, callback: stopVideo }
+                { name: 'scip', callback: scipAhead },
+                { name: 'replay', callback: replay },
+                { name: 'stop', callback: stopVideo }
             ];
             actionCirclesPositions.forEach(function(action) {
-                renderEntity(new Entity(action.position, 'primitive: plane; width: 0.6; height: 0.6', 'color: yellow', action.name), 'controllsSquare');
-                document.querySelector('#' + action.name).setAttribute('rotation', '0 45 0');
-                document.querySelector('#' + action.name).setAttribute('visible', 'false');
-                document.querySelector('#' + action.name).setAttribute('mixin', 'option');
-                document.querySelector('#' + action.name).setAttribute('event-proxy', 'emit: startAnimation');
-
-
-                renderEntity(new Entity(action.position, 'primitive: plane; width: 0.8; height: 1', 'color: #a4f442', action.name + 'light'), 'controllsSquare');
-                let light = document.querySelector('#' + action.name + 'light');
-                light.setAttribute('rotation', '0 45 0');
-                let lightPosition = action.position;
-                lightPosition.x -= 0.5;
-                lightPosition.y += 0.35;
-                lightPosition.z -= 0.5;
-
-                light.setAttribute('position', lightPosition);
-
-                light.setAttribute('animation__color', "property: opacity; dir: alternate; dur: 200; easing: easeInOutSine; loop: false; to: 1;startEvents: color;");
-
-
                 document.querySelector('#' + action.name).addEventListener('click', action.callback);
             });
         };
