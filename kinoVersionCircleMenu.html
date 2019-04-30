@@ -3,50 +3,20 @@
 <head>
     <title>Kino in 3D</title>
     <meta charset="UTF-8">
-    <!--<style>
-       /*body {*/
-       /*   overflow: scroll !important*/
-       /* }*/
-    
-       /* html {*/
-       /*   position: relative !important*/
-       /* }*/
-    
-       /* a-scene {*/
-       /*   position: fixed;*/
-       /*   top: 0;*/
-       /*   left: 0*/
-       /* }*/
-    </style>-->
 </head>
 
 <body>
     <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
     <script src="/aframe-look-at-component.js"></script>
 
-
-    <!--    <script src="../build.js"></script>-->
-    <!--<script src="https://rawgit.com/aframevr/aframe/6019885/dist/aframe-master.min.js"></script>-->
-    <!--<script src="../../dist/aframe-animation-component.min.js"></script>-->
-    <!--<script src="components/event-proxy.js"></script>-->
-    <!--<script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js">-->
-
-
     <script>
-        // Sets the 'default' eye viewed by camera in non-VR mode
-
         AFRAME.registerComponent('stereocam', {
 
             schema: {
                 eye: { type: 'string', default: "left" }
             },
 
-            // Cam is not attached on init, so use a flag to do this once at 'tick'
-
-            // Use update every tick if flagged as 'not changed yet'
-
             init: function() {
-                // Flag to register if cam layer has already changed
                 this.layer_changed = false;
             },
 
@@ -54,22 +24,13 @@
 
                 var originalData = this.data;
 
-                // If layer never changed
-
                 if (!this.layer_changed) {
-
-                    // because stereocam component should be attached to an a-camera element
-                    // need to get down to the root PerspectiveCamera before addressing layers
-
-                    // Gather the children of this a-camera and identify types
-
                     var childrenTypes = [];
 
                     this.el.object3D.children.forEach(function(item, index, array) {
                         childrenTypes[index] = item.type;
                     });
 
-                    // Retrieve the PerspectiveCamera
                     var rootIndex = childrenTypes.indexOf("PerspectiveCamera");
                     var rootCam = this.el.object3D.children[rootIndex];
 
@@ -84,11 +45,6 @@
             }
 
         });
-
-
-
-
-        // Sets the 'default' eye viewed by camera in non-VR mode
 
         AFRAME.registerComponent('stereo', {
 
@@ -127,28 +83,17 @@
             }
         });
     </script>
-    <!--<div style="height:150vh;">-->
-
-    <!--</div>-->
     <a-scene id='scene'>
 
 
         <a-assets>
             <img id="sky" src="/R0010192_20181001134315.JPG">
             <video id="video" loop src="public/videos/carotisOP_L.mp4" width="1024" height="512" type='video/mp4' muted>
-            <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
 
             <video id="videoR" loop src="public/videos/carotisOP_R.mp4" width="1024" height="512" type='video/mp4' muted>
-                <!--<video id="video" loop autoplay src="/Love 30 DE.mp4">-->
             </video>
         </a-assets>
-
-
-
-
-        <!--<a-light color="#333" position="0 5 0" type="ambient" intensity="0.2"></a-light>-->
-        <!--<a-light type="point" color="#EEE" intensity="1.0" position="3 3 10"></a-light>-->
 
         <a-camera position="0 0 0" stereocam="eye:left;" id='camera' zoom='1'>
             <a-entity animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1" animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1" animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
@@ -225,10 +170,7 @@
         </a-entity>
     </a-scene>
 
-
-    <!--<script src="/aframe-stereo-component.js"></script>-->
     <script>
-        //     }, false);
 
         function getPlatformType() {
             if (navigator.userAgent.match(/mobile/i)) {
@@ -286,17 +228,6 @@
         const playToggleVideo = (e) => {
             let video = document.querySelector('#video');
             let videoR = document.querySelector('#videoR');
-            // document.querySelector('#textField').setAttribute('text', 'value: clcked play button'); 
-            //var promise = document.querySelector('video').play();
-
-            //if (promise !== undefined) {
-            //    promise.catch(error => {
-            // Auto-play was prevented
-            // Show a UI element to let the user manually start playback
-            //    }).then(() => {
-            // Auto-play started
-            //    });
-            //}
 
             if (video.paused && videoR.paused) {
                 video.play();
@@ -311,17 +242,8 @@
                 videoR.setAttribute('muted', 'true');
             }
 
-            //   changeView(e);
 
         };
-
-        // function changeView(e) {
-        //     // var animation = document.querySelector('#' + e.target.id + 'light').children[0];
-        //     var animation = document.querySelector('a-animation');
-        //     animation.emit("startAnimation");
-        //     console.log(view.emit("startAnimation"));
-        // }
-
 
         const stopVideo = () => {
             let video = document.querySelector('#video');
@@ -423,7 +345,6 @@
 
                             let strToDisplay = ' Absolute: ' + absolute + '\n Alpha: ' + alpha + '\n Beta: ' + beta + '\n Gamma: ' + gamma;
                             document.querySelector('#textField').setAttribute('text', 'value: ' + strToDisplay);
-                            //   document.querySelector('#camera').setAttribute('rotation', {x: alpha, y: beta, z: gamma});
                         }, true);
                     }
                     break;
@@ -435,18 +356,16 @@
             dim.addEventListener('mouseenter', function(e) {
                 dim.setAttribute('position', '0 0 -7');
                 undim.setAttribute('position', '0 0 -5.9');
+                document.querySelector('#cursor').setAttribute('visible', 'false');
             });
 
             undim.addEventListener('mouseleave', function(e) {
                 dim.setAttribute('position', '0 0 -5.9');
                 undim.setAttribute('position', '0 0 -7');
+                document.querySelector('#cursor').setAttribute('visible', 'true');
             });
         };
 
-        // var event = new Event('go');
-        // document.querySelector('#animationTest1').addEventListener('click', function(){
-        //     console.log(document.querySelector('#animationTest').el.emit('animationbegin', this.eventDetail))
-        // })
 
         let visibleControlls = false;
         main();
