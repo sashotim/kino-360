@@ -324,6 +324,17 @@
                             visibleControlls = true;
                         }
                     });
+                    
+                    let dim = document.querySelector('#dimm');
+                    let undim = document.querySelector('#undimm');
+        
+                    dim.addEventListener('mouseenter', function(e) {
+                        document.querySelector('#cursor').setAttribute('visible', 'false');
+                    });
+        
+                    undim.addEventListener('mouseleave', function(e) {
+                        document.querySelector('#cursor').setAttribute('visible', 'true');
+                    });
 
                     if (getMobileOperatingSystem() === 'iOS') {
                         // fix for chrome navbar in ios
@@ -356,13 +367,11 @@
             dim.addEventListener('mouseenter', function(e) {
                 dim.setAttribute('position', '0 0 -7');
                 undim.setAttribute('position', '0 0 -5.9');
-                document.querySelector('#cursor').setAttribute('visible', 'false');
             });
 
             undim.addEventListener('mouseleave', function(e) {
                 dim.setAttribute('position', '0 0 -5.9');
                 undim.setAttribute('position', '0 0 -7');
-                document.querySelector('#cursor').setAttribute('visible', 'true');
             });
         };
 
